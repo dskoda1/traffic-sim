@@ -19,23 +19,37 @@ class CarSprite(pygame.sprite.Sprite):
         self.k_left = self.k_right = self.k_down = self.k_up = 0
 
     def update(self, deltat):
+        # Speed check
         self.speed += (self.k_up + self.k_down)
         if self.speed > self.MAX_FORWARD_SPEED:
             self.speed = self.MAX_FORWARD_SPEED
         if self.speed < -self.MAX_REVERSE_SPEED:
             self.speed = self.MAX_REVERSE_SPEED
 
+        # Set the cars direction
         self.direction += self.k_right + self.k_left
+
+        # Unpack the position and update it
         x, y = self.position
         rad = self.direction * math.pi / 180
 
         x += -self.speed * math.sin(rad)
         y += -self.speed * math.cos(rad)
 
+        # Wrap the position so the car appears on the other side of the screen
+        if x > screen.get_width():
+            x = 0
+        if x < 0:
+            x = screen.get_width()
+        if y > screen.get_height():
+            y = 0
+        if y < 0:
+            y = screen.get_height()
+
+        # Save the position,  rotate the image, and position the car
         self.position = (x, y)
         self.image = pygame.transform.rotate(self.src_image, self.direction)
         self.rect = self.image.get_rect()
-
         self.rect.center = self.position
 
 # CREATE A CAR AND RUN
