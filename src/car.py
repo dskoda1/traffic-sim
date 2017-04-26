@@ -28,21 +28,16 @@ class CarSprite(Sprite):
         if self.speed < 0:
             self.speed = self.MAX_REVERSE_SPEED
 
-        # Set the cars direction
-            
-        #self.direction += self.k_right + self.k_left
+        # Only allowed to drive in one direction
         self.direction = 90
 
         # Unpack the position and update it
         x, y = self.position
         rad = self.direction * math.pi / 180
         if self.lane != 0:
-            if self.lane == 1:
-                y += 10
-                self.lane = 0
-            elif self.lane == -1:
-                y -= 10
-                self.lane = 0
+            # self.lane is set to -1 or 1 for right/left
+            y += self.lane * 10
+            self.lane = 0
 
         x += -self.speed * math.sin(rad)
         #y += -self.speed * math.cos(rad)
