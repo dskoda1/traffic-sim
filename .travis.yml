@@ -2,10 +2,13 @@ language: python
 
 python:
       - "3.6.1"
-      - "3.5-dev" # 3.5 development branch
       - "3.6-dev" # 3.6 development branch
 
-install: "pip install -r requirements.txt"
+install:
+    - pip install -r requirements.txt
+    - pip install pylint
 
 # command to run tests
-script: python -m unittest discover tests/
+script:
+    - python -m unittest discover tests/
+    - pylint src/

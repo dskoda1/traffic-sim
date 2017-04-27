@@ -10,11 +10,13 @@ class Speeds():
     ACCELERATION = 2
     TURN_SPEED = 5
 
-def calculate_speed(current_speed, forward, backward):
+def calculate_speed(current_speed: int, forward: int, backward: int) -> int:
+    """Provided a current speed, and a forward/backward change, calculate a
+    new speed. Sets upper and lower bounds on the speed via constants.
+    """
     current_speed += forward + backward
     if current_speed > Speeds.MAX_FORWARD_SPEED:
         current_speed = Speeds.MAX_FORWARD_SPEED
     if current_speed < 0:
         current_speed = Speeds.MAX_REVERSE_SPEED
     return current_speed
-

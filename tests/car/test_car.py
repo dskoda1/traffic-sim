@@ -9,4 +9,9 @@ class TestCarLogic(unittest.TestCase):
         speed = logic.calculate_speed(2, 4, -1)
         self.assertEqual(speed, 5)
 
+    def test_sets_upper_bound(self):
+        """adds forward and backward to current."""
+        speed = logic.calculate_speed('hello', 4, -1)
+        self.assertEqual(speed, 5)
+
 
