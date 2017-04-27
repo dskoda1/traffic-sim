@@ -40,5 +40,5 @@ class HighwayDrawer(object):
                 pygame.draw.lines(self.screen, color, False, lanes, 1)
                 lanes = []
                 lane_height += 20
-        
+
 

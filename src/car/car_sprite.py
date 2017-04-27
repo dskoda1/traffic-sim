@@ -1,14 +1,11 @@
 import pygame
 import math
 
+from src.car import logic
+
 from pygame.sprite import Sprite
 
-
 class CarSprite(Sprite):
-    MAX_FORWARD_SPEED = 10
-    MAX_REVERSE_SPEED = 0
-    ACCELERATION = 2
-    TURN_SPEED = 5
 
     def __init__(self, image, position, screen):
         Sprite.__init__(self)
@@ -20,13 +17,10 @@ class CarSprite(Sprite):
         self.lane = 0
         self.k_left = self.k_right = self.k_down = self.k_up = 0
 
+
     def update(self, deltat):
         # Speed check
-        self.speed += (self.k_up + self.k_down)
-        if self.speed > self.MAX_FORWARD_SPEED:
-            self.speed = self.MAX_FORWARD_SPEED
-        if self.speed < 0:
-            self.speed = self.MAX_REVERSE_SPEED
+        self.speed = logic.calculate_speed(self.speed, self.k_up, self.k_down)
 
         # Only allowed to drive in one direction
         self.direction = 90

@@ -15,19 +15,19 @@ highway = HighwayDrawer(screen)
 car_group = pygame.sprite.RenderPlain(car)
 pygame.display.update()
 while 1:
-    deltat = clock.tick(120)
+    deltat = clock.tick(30)
     for event in pygame.event.get():
         if not hasattr(event, 'key'): continue
         down = event.type == KEYDOWN
-        if event.key == K_RIGHT: 
+        if event.key == K_RIGHT:
             car.k_down = down * -2
             car.lane = 0
-        elif event.key == K_LEFT: 
+        elif event.key == K_LEFT:
             car.k_up = down * 2
             car.lane = 0
-        elif event.key == K_UP: 
+        elif event.key == K_UP:
             car.lane = -1
-        elif event.key == K_DOWN: 
+        elif event.key == K_DOWN:
             car.lane = 1
         elif event.key == K_ESCAPE: sys.exit(0)
 
