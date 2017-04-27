@@ -1,4 +1,6 @@
-# Traffic Simulator
+# Traffic Simulator  
+[![Build Status](https://travis-ci.org/GentlemenoftheCode/traffic-sim.svg?branch=master)](https://travis-ci.org/GentlemenoftheCode/traffic-sim)
+
 
 
 ### Installation  

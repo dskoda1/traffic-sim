@@ -19,6 +19,7 @@ while 1:
     for event in pygame.event.get():
         if not hasattr(event, 'key'): continue
         down = event.type == KEYDOWN
+
         if event.key == K_RIGHT:
             car.k_down = down * -2
             car.lane = 0

@@ -23,9 +23,15 @@ class CarSprite(Sprite):
         self.k_down = self.k_up = 0
         self.image = None
         self.rect = None
+        self.last_action = 0
 
 
     def update(self, deltat):
+        self.last_action += deltat
+        # Can set how often a car will take an action with this
+        if self.last_action > 2000:
+            self.last_action = 0
+
         # Make decisions based on deltat
         if deltat:
             pass
