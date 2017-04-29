@@ -4,20 +4,25 @@ It defers decision making to the src.car.logic functions.
 
 import pygame
 import math
+import random
+from ts import RandomDecision
 
-from src.car import logic
+from ts.car import logic, config
 
 from pygame.sprite import Sprite
 
 class CarSprite(Sprite):
     """CarSprite is a pygame.Sprite subclass, and renders a car."""
 
-    def __init__(self, image, position, screen):
+    def __init__(self, image, position, screen, highway):
         Sprite.__init__(self)
-        self.src_image = pygame.transform.scale(pygame.image.load(image), (30, 20))
-        self.src_image = pygame.transform.rotate(self.src_image, 90)
         self.position = position
         self.screen = screen
+        self.highway = highway
+
+        # Car specific attributes
+        self.src_image = pygame.transform.scale(pygame.image.load(image), (30, 20))
+        self.src_image = pygame.transform.rotate(self.src_image, 90)
         self.speed = self.direction = 0
         self.lane = 0
         self.k_down = self.k_up = 0
@@ -25,18 +30,34 @@ class CarSprite(Sprite):
         self.rect = None
         self.last_action = 0
 
+        self.aggressivity = random.randint(1, config.AGG_FACTOR)
+        self.action_interval = random.randint(500, 2000)
+
 
     def update(self, deltat):
         self.last_action += deltat
         # Can set how often a car will take an action with this
-        if self.last_action > 2000:
+        if self.last_action > self.action_interval:
             self.last_action = 0
+            # This is the main routine of decision making for a car.
+            # TODO: This will not act on things that happen frame by frame
+            # it is only for making decisions that are not effected by
+            # outside forces, every ACTION_INTERVAL.
+            # Order of things to check for:
+            # Speed not up to max speed, speed up.
+            if self.speed == 0:
+                self.speed = self.aggressivity
+            else:
+                lane = self.highway.lane(self.position[1])
+                # attempt to switch lanes
+                if lane > 0 and lane < self.highway.MAX_LANE -1:
+                    self.lane = random.choice([1, -1])
+                elif lane == 0:
+                    self.lane = random.choice([1])
+                elif lane == self.highway.MAX_LANE - 1:
+                    self.lane = random.choice([-1])
 
-        # Make decisions based on deltat
-        if deltat:
-            pass
         # Speed check
-        self.speed = logic.calculate_speed(self.speed, self.k_up, self.k_down)
 
         # Only allowed to drive in one direction
         self.direction = 90
@@ -46,7 +67,7 @@ class CarSprite(Sprite):
         rad = self.direction * math.pi / 180
         if self.lane != 0:
             # self.lane is set to -1 or 1 for right/left
-            y += self.lane * 10
+            y += self.lane * 20
             self.lane = 0
 
         x += -self.speed * math.sin(rad)
@@ -63,7 +84,16 @@ class CarSprite(Sprite):
             y = self.screen.get_height()
 
         # Save the position,  rotate the image, and position the car
-        self.position = (x, y)
+        self.position = x, y
         self.image = pygame.transform.rotate(self.src_image, self.direction)
         self.rect = self.image.get_rect()
         self.rect.center = self.position
+
+    @property
+    def position(self):
+        return self._x, self._y
+
+    @position.setter
+    def position(self, xy):
+        self._x = xy[0]
+        self._y = xy[1]

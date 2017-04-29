@@ -1,6 +1,6 @@
 import unittest
 
-from src.car import logic
+from ts.car import logic
 
 class TestCarLogic(unittest.TestCase):
 
